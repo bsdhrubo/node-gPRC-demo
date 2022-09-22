@@ -1,37 +1,40 @@
 import TodoModel from './model.js'
 
 
-export const insertMany = async(call, callback) =>{ 
-    try {
-        console.log(callback);
+export const insertMany = async ({request}, callback) =>{ 
+    try { 
         const data = [{task:"a"},{task:"b"},{task:"c"}]
-        console.log({data});
+        
         await TodoModel.collection.drop()
-        await TodoModel.insertMany(data)
-        const res = await getAll(1,callback) 
-        console.log(res);
-        return res
-    } catch (error) {
-        console.log(error);
-        return false 
+        let res = await TodoModel.insertMany(data) 
+        callback(null, {tasks: res})
+    } catch (error) { 
+        callback(null, {tasks: error})
     }
 } 
 
-export const getAll = async(call, callback)=>{
-    const {page} = call.request
-    let res = await TodoModel.find({}).skip((page-1)*20).limit(20)
-    res = res.map(e => {
-        return {task: e.task}
-    }) 
+export const getAll = async({request}, callback)=>{ 
+    let res = await TodoModel.find({})
     await callback(null, {tasks: res})
 }
 
-export const insertOne = async(data, callback)=>{ 
-    const res = await TodoModel.create(data)
-    callback(null, res)
+export const insertOne = async({request}, callback)=>{  
+    const data = request
+    if(data){
+        const res = await TodoModel.create(data)
+        callback(null, res)
+    }else{
+        callback(null, null)
+    }
+    
 } 
 
-export const deleteById = async(id, callback)=>{ 
-    const res = await TodoModel.findOneAndDelete(id)
-    callback(null, res)
+export const deleteById = async({request}, callback)=>{ 
+    const id = request
+    if(id){
+        const res = await TodoModel.findOneAndDelete(id)
+        callback(null, res)
+    }else{
+        callback(null, null)
+    }
 } 

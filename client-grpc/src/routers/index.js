@@ -8,14 +8,12 @@ router.get('/', (req, res)=>{
 })
 
 router.get('/all', async (req, res)=>{
-    const page = parseInt(req.query.page) || 1
-    const response = await getAll(page)
-    console.log({response});
+    const response = await getAll()
     res.send(response)
 })
 
 router.get('/insert-many', async (req, res)=>{
-    const response = await insertMany() 
+    const response = await insertMany()
     res.send(response)
 })
 router.post('/insert-one', async (req, res)=>{

@@ -1,8 +1,9 @@
 
 import grpc from "grpc";
 import protoLoader from "@grpc/proto-loader"; 
+import { config } from "./src/config/config.js";
 
-const PROTO_PATH = '../bufferType.proto' 
+const PROTO_PATH = './bufferType.proto' 
 
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 	keepCase: true,
@@ -15,10 +16,10 @@ const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 
 const todoProto = grpc.loadPackageDefinition(packageDefinition).todo;
 
-export const client = new todoProto.Todo('localhost:50051', grpc.credentials.createInsecure() )
+export const client = new todoProto.Todo(config.gRPC_URI, grpc.credentials.createInsecure() )
 
 const deadline = new Date();
-deadline.setSeconds(deadline.getSeconds() + 1);
+deadline.setSeconds(deadline.getSeconds() + 20);
 client.waitForReady(deadline, (err)=> {
     if(err)
     console.log(err)

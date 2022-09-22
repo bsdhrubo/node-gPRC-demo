@@ -1,0 +1,27 @@
+syntax = "proto3"; 
+package todo;
+service Todo {
+  rpc insertMany (empty) returns (todoResponseArray) {}
+  rpc getAll (empty) returns (todoResponseArray) {}
+  rpc insertOne (addTodo) returns (todoResponse) {}
+  rpc deleteById (todoDelete) returns (todoResponse) {}
+}
+
+message empty{} 
+
+message Task{
+  required string task = 1;
+}
+message addTodo {
+  required string task = 1;
+}
+
+message todoResponseArray {
+  repeated Task tasks = 1;
+}
+message todoResponse {
+  string task = 1;
+}
+message todoDelete {
+  string id = 1;
+}
