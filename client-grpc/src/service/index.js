@@ -3,7 +3,7 @@ import {promisify} from 'util'
 
 const usePromise=async(method, args)=>{
     const req =  promisify(method).bind(client)
-    return await req(args) 
+    return await req(args)
 }
 
 export const insertMany = async()=>{ 
@@ -20,4 +20,4 @@ export const insertOne = async(data)=>{
 
 export const deleteById = async(id)=>{ 
     return await usePromise(client.deleteById, id)
-} 
+}

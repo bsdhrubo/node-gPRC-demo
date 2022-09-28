@@ -10,4 +10,4 @@ COPY package*.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
 # copy all from local dir to docker workdir
-COPY . .
+COPY . ./

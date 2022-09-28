@@ -18,7 +18,7 @@ let packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 let todoProto = grpc.loadPackageDefinition(packageDefinition).todo;
 
 async function main() { 
-	try {
+	try { 
 		await connectToDatabase();
 		const server = new grpc.Server();
 		server.addService(todoProto.Todo.service, mapped_methods);

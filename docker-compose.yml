@@ -1,20 +1,40 @@
 version: '3.7'
 
 services:
+  server-mongodb:
+    image: mongo:latest
+    container_name: server-mongodb
+    restart: always 
+    ports:
+      - "27018:27017"
+    expose:
+      - 27018
+
   server-grpc:
     container_name: server-grpc 
     build:
       context: ./server-grpc
       dockerfile: Dockerfile  
+    restart: always
+    depends_on:
+      - "server-mongodb"
     ports:
       - '50051:50051'
+    environment:
+      MONGO_URI: 'mongodb://server-mongodb:27017/grpc'
+      GRPC_URI: '0.0.0.0:50051'
     command: yarn start
 
   client-grpc:
     container_name: client-grpc
     build:
       context: ./client-grpc
-      dockerfile: Dockerfile  
+      dockerfile: Dockerfile 
+    restart: always
+    depends_on:
+      - "server-grpc"
+    environment: 
+      GRPC_URI: '0.0.0.0:50051' 
     ports:
       - '3000:3000'
     command: yarn start
